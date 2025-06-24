@@ -213,25 +213,12 @@ HyenaDNA's mean pooling creates species-agnostic representations, enabling analy
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## 📄 Citation
-
-If you use BRIDGE-LM in your research, please cite:
-
-```bibtex
-@software{bridge2024,
-  author = {Hyseni, Chaz},
-  title = {BRIDGE-LM: Biological Regulatory Integration & Detection through Genomic Language Models},
-  year = {2024},
-  url = {https://github.com/chazhyseni/BRIDGE-LM}
-}
-```
-
 ## 🙏 Acknowledgments
 
 BRIDGE-LM builds upon excellent work by:
-- [HyenaDNA](https://github.com/HazyResearch/hyena-dna) (Nguyen et al., Stanford)
-- [DNABERT-2](https://github.com/Zhihan1996/DNABERT_2) (Zhou et al., Microsoft Research)
-- [LucaOne](https://github.com/LucaOne/LucaOne) (Chen et al.)
+- [HyenaDNA](https://github.com/HazyResearch/hyena-dna) 
+- [DNABERT-2](https://github.com/Zhihan1996/DNABERT_2) 
+- [LucaOne](https://github.com/LucaOne/LucaOne) 
 
 ## 📧 Contact
 
