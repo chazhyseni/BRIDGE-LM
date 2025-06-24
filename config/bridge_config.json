@@ -1,0 +1,40 @@
+{
+    "models": {
+        "use_hyenadna": true,
+        "use_dnabert2": true,
+        "use_lucaone": true,
+        "device": "cuda",
+        "hyena_max_length": 450000,
+        "dnabert_max_length": 512,
+        "model_cache_dir": "models/pretrained"
+    },
+    "vllm": {
+        "max_batch_tokens": 65536,
+        "max_batch_size": 256,
+        "batch_timeout": 0.1,
+        "enable_prefix_caching": true,
+        "gpu_memory_utilization": 0.9
+    },
+    "data": {
+        "gene_annotation_file": "data/annotations/hg38.gtf",
+        "genome": "hg38",
+        "genome_fasta": "data/genomes/hg38.fa"
+    },
+    "analysis": {
+        "default_upstream": 100000,
+        "default_downstream": 10000,
+        "min_element_length": 100,
+        "max_element_length": 2000
+    },
+    "thresholds": {
+        "enhancer_coarse": 0.7,
+        "enhancer_fine": 0.8,
+        "promoter_coarse": 0.65,
+        "promoter_fine": 0.85
+    },
+    "output": {
+        "results_dir": "./results",
+        "cache_dir": "./cache",
+        "log_level": "INFO"
+    }
+}

@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRIDGE - Biological Regulatory Integration & Detection for Gene Expression</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --bg-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav li {
+            margin: 0 1.5rem;
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 4rem 0;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Feature Box */
+        .feature {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Code Blocks */
+        pre {
+            background: #f4f4f4;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            overflow-x: auto;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Diagram Styles */
+        .diagram-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
+        }
+
+        /* Workflow */
+        .workflow {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .workflow-step::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 50px;
+            width: 2px;
+            height: calc(100% + 2rem);
+            background: #ddd;
+            z-index: -1;
+        }
+
+        .workflow-step:last-child::before {
+            display: none;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Interactive Elements */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--secondary-color);
+        }
+
+        .tab.active {
+            color: var(--secondary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav li {
+                margin: 0 0.5rem;
+            }
+
+            .workflow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .workflow-step::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .cta-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Model Comparison Visual */
+        .model-box {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            background: #f9f9f9;
+        }
+
+        .model-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: #e8f4f8;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .warning-box {
+            background: #fef5e7;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>BRIDGE-LM</h1>
+            <p>Biological Regulatory Integration & Detection through Genomic Language Models</p>
+            <p style="font-size: 1.1rem; margin-top: 1rem;">A hierarchical transformer-based framework that orchestrates multiple genomic language models to detect regulatory elements with both genome-wide context and nucleotide-level precision</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#problem">The Problem</a></li>
+            <li><a href="#solution">Our Solution</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#technical">Technical Details</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#future">Future Work</a></li>
+        </ul>
+    </nav>
+
+    <section id="problem">
+        <div class="container">
+            <h2>The Challenge of Regulatory Element Detection</h2>
+
+            <div class="diagram-container">
+                <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+                    <text x="500" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50">The Regulatory Landscape Challenge</text>
+
+                    <!-- DNA double helix -->
+                    <g transform="translate(100, 60)">
+                        <path d="M0,0 Q20,20 40,0 T80,0 T120,0 T160,0 T200,0 T240,0 T280,0 T320,0 T360,0 T400,0 T440,0 T480,0 T520,0 T560,0 T600,0 T640,0 T680,0 T720,0 T760,0 T800,0"
+                              stroke="#3498db" stroke-width="3" fill="none"/>
+                        <path d="M0,40 Q20,20 40,40 T80,40 T120,40 T160,40 T200,40 T240,40 T280,40 T320,40 T360,40 T400,40 T440,40 T480,40 T520,40 T560,40 T600,40 T640,40 T680,40 T720,40 T760,40 T800,40"
+                              stroke="#e74c3c" stroke-width="3" fill="none"/>
+
+                        <!-- Connecting lines -->
+                        <line x1="20" y1="0" x2="20" y2="40" stroke="#95a5a6" stroke-width="1"/>
+                        <line x1="60" y1="0" x2="60" y2="40" stroke="#95a5a6" stroke-width="1"/>
+                        <line x1="100" y1="0" x2="100" y2="40" stroke="#95a5a6" stroke-width="1"/>
+                        <line x1="140" y1="0" x2="140" y2="40" stroke="#95a5a6" stroke-width="1"/>
+                        <line x1="180" y1="0" x2="180" y2="40" stroke="#95a5a6" stroke-width="1"/>
+                    </g>
+
+                    <!-- Enhancers at various distances -->
+                    <rect x="150" y="150" width="80" height="30" rx="15" fill="#e74c3c" opacity="0.8"/>
+                    <text x="190" y="170" text-anchor="middle" font-size="12" fill="white">Enhancer</text>
+
+                    <rect x="350" y="150" width="80" height="30" rx="15" fill="#e74c3c" opacity="0.8"/>
+                    <text x="390" y="170" text-anchor="middle" font-size="12" fill="white">Enhancer</text>
+
+                    <rect x="700" y="150" width="80" height="30" rx="15" fill="#e74c3c" opacity="0.8"/>
+                    <text x="740" y="170" text-anchor="middle" font-size="12" fill="white">Enhancer</text>
+
+                    <!-- Gene -->
+                    <rect x="450" y="250" width="100" height="40" rx="5" fill="#27ae60"/>
+                    <text x="500" y="275" text-anchor="middle" font-size="14" fill="white" font-weight="bold">Target Gene</text>
+
+                    <!-- Interactions -->
+                    <path d="M190,180 Q300,220 500,250" stroke="#e74c3c" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                    <path d="M390,180 Q450,220 500,250" stroke="#e74c3c" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                    <path d="M740,180 Q650,220 500,250" stroke="#e74c3c" stroke-width="2" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+                    <!-- Distance labels -->
+                    <text x="190" y="220" text-anchor="middle" font-size="12" fill="#666">-50kb</text>
+                    <text x="390" y="220" text-anchor="middle" font-size="12" fill="#666">-10kb</text>
+                    <text x="740" y="220" text-anchor="middle" font-size="12" fill="#666">+200kb</text>
+
+                    <!-- Challenges text -->
+                    <text x="500" y="340" text-anchor="middle" font-size="14" fill="#666">Enhancers can be up to 1 million base pairs away from their target genes</text>
+                    <text x="500" y="360" text-anchor="middle" font-size="14" fill="#666">No clear sequence signatures • Variable lengths • Cell-type specific</text>
+
+                    <!-- Arrow marker -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>Why is this hard?</h3>
+                    <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                        <li><strong>Distance:</strong> Regulatory elements can be located up to 1 million base pairs away from the genes they regulate</li>
+                        <li><strong>Size variability:</strong> Enhancers range from 100-2000bp with no fixed length</li>
+                        <li><strong>Fuzzy boundaries:</strong> Unlike genes with clear start/stop codons, regulatory elements have gradual transitions</li>
+                        <li><strong>Context-dependent:</strong> The same sequence can be an enhancer in one cell type but inactive in another</li>
+                        <li><strong>Evolutionary flexibility:</strong> Regulatory sequences evolve rapidly, making cross-species prediction challenging</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Current Approaches Fall Short</h3>
+                    <p><strong>Traditional methods</strong> (PWM scanning, k-mer counting) miss complex patterns and long-range dependencies.</p>
+                    <p style="margin-top: 1rem;"><strong>Single deep learning models</strong> face a fundamental tradeoff:</p>
+                    <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                        <li>Short context models (like DNABERT-2 with 512bp) miss distant interactions</li>
+                        <li>Long context models (like HyenaDNA with 450kb) lack nucleotide precision</li>
+                        <li>Neither can validate biological plausibility of predictions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" style="background: white;">
+        <div class="container">
+            <h2>The BRIDGE Solution: Hierarchical Model Orchestration</h2>
+
+            <div class="highlight-box">
+                <p><strong>Key Insight:</strong> Instead of building one model that does everything adequately, BRIDGE orchestrates multiple specialized models, each excelling at what it does best, in a biologically-informed pipeline.</p>
+            </div>
+
+            <div class="diagram-container">
+                <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+                    <text x="500" y="30" text-anchor="middle" font-size="22" font-weight="bold" fill="#2c3e50">BRIDGE's Three-Stage Hierarchical Approach</text>
+
+                    <!-- Input sequence -->
+                    <rect x="50" y="70" width="900" height="40" rx="5" fill="#e8f4f8" stroke="#3498db" stroke-width="2"/>
+                    <text x="500" y="95" text-anchor="middle" font-size="14" fill="#2c3e50">Input: DNA Sequence (up to 450kb)</text>
+
+                    <!-- Stage 1 -->
+                    <g transform="translate(0, 150)">
+                        <rect x="200" y="0" width="600" height="100" rx="10" fill="#3498db" fill-opacity="0.1" stroke="#3498db" stroke-width="2"/>
+                        <text x="500" y="-10" text-anchor="middle" font-size="18" font-weight="bold" fill="#3498db">Stage 1: Long-Range Scanning</text>
+
+                        <!-- HyenaDNA box -->
+                        <rect x="350" y="20" width="300" height="60" rx="5" fill="white" stroke="#3498db" stroke-width="2"/>
+                        <text x="500" y="45" text-anchor="middle" font-size="16" font-weight="bold">HyenaDNA</text>
+                        <text x="500" y="65" text-anchor="middle" font-size="12" fill="#666">450kb context • State-space models</text>
+
+                        <!-- Features -->
+                        <text x="220" y="40" font-size="12" fill="#666">✓ Captures distal enhancers</text>
+                        <text x="220" y="60" font-size="12" fill="#666">✓ Mean pooling</text>
+                        <text x="220" y="80" font-size="12" fill="#666">✓ Cross-species</text>
+
+                        <text x="670" y="40" font-size="12" fill="#666">→ Coarse predictions</text>
+                        <text x="670" y="60" font-size="12" fill="#666">→ Candidate regions</text>
+                        <text x="670" y="80" font-size="12" fill="#666">→ ~100bp resolution</text>
+                    </g>
+
+                    <!-- Arrow -->
+                    <path d="M 500 260 L 500 300" stroke="#666" stroke-width="3" marker-end="url(#arrowhead2)"/>
+                    <text x="520" y="285" font-size="12" fill="#666">Candidate regions</text>
+
+                    <!-- Stage 2 -->
+                    <g transform="translate(0, 320)">
+                        <rect x="200" y="0" width="600" height="100" rx="10" fill="#e74c3c" fill-opacity="0.1" stroke="#e74c3c" stroke-width="2"/>
+                        <text x="500" y="-10" text-anchor="middle" font-size="18" font-weight="bold" fill="#e74c3c">Stage 2: Precise Boundary Detection</text>
+
+                        <!-- DNABERT-2 box -->
+                        <rect x="350" y="20" width="300" height="60" rx="5" fill="white" stroke="#e74c3c" stroke-width="2"/>
+                        <text x="500" y="45" text-anchor="middle" font-size="16" font-weight="bold">DNABERT-2</text>
+                        <text x="500" y="65" text-anchor="middle" font-size="12" fill="#666">512bp window • BPE tokenization</text>
+
+                        <!-- Features -->
+                        <text x="220" y="40" font-size="12" fill="#666">✓ Token-level analysis</text>
+                        <text x="220" y="60" font-size="12" fill="#666">✓ Attention patterns</text>
+                        <text x="220" y="80" font-size="12" fill="#666">✓ Fine boundaries</text>
+
+                        <text x="670" y="40" font-size="12" fill="#666">→ Exact start/end</text>
+                        <text x="670" y="60" font-size="12" fill="#666">→ Element type</text>
+                        <text x="670" y="80" font-size="12" fill="#666">→ Core regions</text>
+                    </g>
+
+                    <!-- Arrow -->
+                    <path d="M 500 430 L 500 470" stroke="#666" stroke-width="3" marker-end="url(#arrowhead2)"/>
+                    <text x="520" y="455" font-size="12" fill="#666">Refined predictions</text>
+
+                    <!-- Stage 3 -->
+                    <g transform="translate(0, 490)">
+                        <rect x="200" y="0" width="600" height="120" rx="10" fill="#27ae60" fill-opacity="0.1" stroke="#27ae60" stroke-width="2"/>
+                        <text x="500" y="-10" text-anchor="middle" font-size="18" font-weight="bold" fill="#27ae60">Stage 3: Multi-Signal Integration & Validation</text>
+
+                        <!-- Multiple components -->
+                        <rect x="220" y="20" width="130" height="40" rx="5" fill="white" stroke="#27ae60" stroke-width="1"/>
+                        <text x="285" y="45" text-anchor="middle" font-size="12">LucaOne</text>
+
+                        <rect x="360" y="20" width="130" height="40" rx="5" fill="white" stroke="#27ae60" stroke-width="1"/>
+                        <text x="425" y="45" text-anchor="middle" font-size="12">DNA Shape</text>
+
+                        <rect x="500" y="20" width="130" height="40" rx="5" fill="white" stroke="#27ae60" stroke-width="1"/>
+                        <text x="565" y="45" text-anchor="middle" font-size="12">Conservation</text>
+
+                        <rect x="640" y="20" width="130" height="40" rx="5" fill="white" stroke="#27ae60" stroke-width="1"/>
+                        <text x="705" y="45" text-anchor="middle" font-size="12">Motif Analysis</text>
+
+                        <!-- Integration description -->
+                        <text x="500" y="85" text-anchor="middle" font-size="12" fill="#666">Weighted signal integration • Biological constraints • Central dogma validation</text>
+                        <text x="500" y="105" text-anchor="middle" font-size="12" fill="#666">Element-type specific weights • Conservation filtering • TF motif enrichment</text>
+                    </g>
+
+                    <!-- Final output -->
+                    <rect x="300" y="640" width="400" height="40" rx="5" fill="#2c3e50"/>
+                    <text x="500" y="665" text-anchor="middle" font-size="14" fill="white" font-weight="bold">Validated Regulatory Elements with Precise Boundaries</text>
+
+                    <!-- Arrow marker -->
+                    <defs>
+                        <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+
+            <h3>Model Complementarity</h3>
+            <div class="grid grid-3">
+                <div class="model-box">
+                    <h4>HyenaDNA</h4>
+                    <p><strong>Strength:</strong> 450kb context window captures long-range interactions</p>
+                    <p><strong>Innovation:</strong> State-space models for efficient long sequences</p>
+                    <p><strong>BRIDGE uses:</strong> Initial regulatory region detection</p>
+                </div>
+
+                <div class="model-box">
+                    <h4>DNABERT-2</h4>
+                    <p><strong>Strength:</strong> Token-level precision with BPE encoding</p>
+                    <p><strong>Innovation:</strong> Attention patterns reveal functional regions</p>
+                    <p><strong>BRIDGE uses:</strong> Precise boundary refinement</p>
+                </div>
+
+                <div class="model-box">
+                    <h4>LucaOne</h4>
+                    <p><strong>Strength:</strong> Multi-modal biological understanding</p>
+                    <p><strong>Innovation:</strong> Validates DNA→RNA→Protein relationships</p>
+                    <p><strong>BRIDGE uses:</strong> Biological plausibility checking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture">
+        <div class="container">
+            <h2>Deep Dive: Technical Architecture</h2>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('pipeline')">Processing Pipeline</button>
+                <button class="tab" onclick="showTab('refinement')">Boundary Refinement</button>
+                <button class="tab" onclick="showTab('signals')">Signal Integration</button>
+                <button class="tab" onclick="showTab('optimization')">vLLM Optimization</button>
+            </div>
+
+            <div id="pipeline" class="tab-content active">
+                <h3>Complete Processing Pipeline</h3>
+
+                <div class="workflow">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Input Processing</h4>
+                            <pre><code># Accept sequences up to 450kb
+sequence = DNASequence(
+    sequence="ATCG..." * 100000,  # 400kb
+    chromosome="chr12",
+    start=7500000,
+    end=7900000
+)</code></pre>
+                            <p>BRIDGE handles genomic coordinates, FASTA files, or raw sequences. Automatic chunking for sequences >450kb.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Coarse Detection with HyenaDNA</h4>
+                            <pre><code># HyenaDNA processes full sequence
+predictions = hyena.predict_batch([sequence], window_size=8192, stride=4096)
+# Returns candidate regions with scores</code></pre>
+                            <p>Uses sliding windows with 50% overlap. Each window scored for regulatory potential. High-scoring regions become candidates.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Boundary Refinement with DNABERT-2</h4>
+                            <pre><code># For each candidate region, scan at high resolution
+for region in candidate_regions:
+    fine_scores = dnabert2.scan_sequence_precise(
+        region.sequence,
+        window=50,
+        stride=5  # 90% overlap for precision
+    )</code></pre>
+                            <p>Dense scanning around candidate regions. Attention gradients highlight boundaries.</p>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Multi-Signal Integration</h4>
+                            <p>Combine all biological signals with element-type specific weights:</p>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Model predictions (30%)</li>
+                                <li>Attention gradients (20%)</li>
+                                <li>Motif density (25%)</li>
+                                <li>DNA shape features (15%)</li>
+                                <li>Conservation (10%)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Biological Validation</h4>
+                            <p>Apply biological constraints:</p>
+                            <ul style="padding-left: 1.5rem;">
+                                <li>Size filtering (100-2000bp for enhancers)</li>
+                                <li>GC content check (30-70%)</li>
+                                <li>Complexity validation (no simple repeats)</li>
+                                <li>Motif enrichment analysis</li>
+                                <li>Conservation score integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="refinement" class="tab-content">
+                <h3>Boundary Refinement Algorithm</h3>
+
+                <div class="diagram-container">
+                    <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+                        <text x="500" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#2c3e50">Multi-Signal Boundary Detection</text>
+
+                        <!-- Signal traces -->
+                        <g transform="translate(100, 80)">
+                            <!-- Model prediction -->
+                            <text x="0" y="0" font-size="14" fill="#3498db">Model Score</text>
+                            <path d="M 50 20 L 100 20 L 150 15 L 200 10 L 250 5 L 300 5 L 350 10 L 400 15 L 450 20 L 500 20 L 550 20"
+                                  stroke="#3498db" stroke-width="2" fill="none"/>
+                            <rect x="200" y="0" width="150" height="40" fill="#3498db" fill-opacity="0.1"/>
+
+                            <!-- Attention gradient -->
+                            <text x="0" y="60" font-size="14" fill="#e74c3c">Attention Gradient</text>
+                            <path d="M 50 80 L 100 80 L 150 75 L 200 40 L 220 35 L 250 38 L 300 38 L 330 35 L 350 40 L 400 75 L 450 80 L 500 80"
+                                  stroke="#e74c3c" stroke-width="2" fill="none"/>
+
+                            <!-- Motif density -->
+                            <text x="0" y="120" font-size="14" fill="#27ae60">Motif Density</text>
+                            <path d="M 50 140 L 100 140 L 150 135 L 200 120 L 250 110 L 300 110 L 350 120 L 400 135 L 450 140 L 500 140"
+                                  stroke="#27ae60" stroke-width="2" fill="none"/>
+
+                            <!-- DNA shape -->
+                            <text x="0" y="180" font-size="14" fill="#f39c12">DNA Shape</text>
+                            <path d="M 50 200 L 100 198 L 150 190 L 200 185 L 250 180 L 300 180 L 350 185 L 400 190 L 450 198 L 500 200"
+                                  stroke="#f39c12" stroke-width="2" fill="none"/>
+
+                            <!-- Composite signal -->
+                            <text x="0" y="260" font-size="14" font-weight="bold" fill="#2c3e50">Composite Signal</text>
+                            <path d="M 50 280 L 100 278 L 150 270 L 200 240 L 250 230 L 300 230 L 350 240 L 400 270 L 450 278 L 500 280"
+                                  stroke="#2c3e50" stroke-width="3" fill="none"/>
+
+                            <!-- Detected boundaries -->
+                            <line x1="200" y1="60" x2="200" y2="320" stroke="#2c3e50" stroke-width="2" stroke-dasharray="5,5"/>
+                            <line x1="350" y1="60" x2="350" y2="320" stroke="#2c3e50" stroke-width="2" stroke-dasharray="5,5"/>
+                            <text x="200" y="340" text-anchor="middle" font-size="12" fill="#2c3e50">Start</text>
+                            <text x="350" y="340" text-anchor="middle" font-size="12" fill="#2c3e50">End</text>
+
+                            <!-- Final element -->
+                            <rect x="200" y="360" width="150" height="30" rx="15" fill="#e74c3c" opacity="0.8"/>
+                            <text x="275" y="380" text-anchor="middle" font-size="12" fill="white">Refined Element</text>
+                        </g>
+
+                        <!-- Algorithm description -->
+                        <g transform="translate(700, 100)">
+                            <text x="0" y="0" font-size="14" font-weight="bold" fill="#2c3e50">Algorithm Steps:</text>
+                            <text x="0" y="30" font-size="12" fill="#666">1. Extract signal profiles</text>
+                            <text x="0" y="50" font-size="12" fill="#666">2. Normalize to [0,1]</text>
+                            <text x="0" y="70" font-size="12" fill="#666">3. Apply type-specific weights</text>
+                            <text x="0" y="90" font-size="12" fill="#666">4. Create composite signal</text>
+                            <text x="0" y="110" font-size="12" fill="#666">5. Find gradient peaks</text>
+                            <text x="0" y="130" font-size="12" fill="#666">6. Snap to nearest features</text>
+                            <text x="0" y="150" font-size="12" fill="#666">7. Validate boundaries</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="card">
+                    <h4>Key Innovation: Attention Gradient Analysis</h4>
+                    <p>DNABERT-2's attention patterns show sharp transitions at regulatory boundaries. We compute the gradient of attention weights and use peaks to identify precise start/end positions.</p>
+                    <pre><code># Process attention maps
+attention_gradient = np.gradient(attention_map.mean(axis=0))
+gradient_magnitude = np.abs(attention_gradient)
+
+# Smooth and find peaks
+smoothed = gaussian_filter1d(gradient_magnitude, sigma=2)
+peaks, _ = find_peaks(smoothed, prominence=0.2, distance=20)
+
+# Peaks indicate potential boundaries</code></pre>
+                </div>
+            </div>
+
+            <div id="signals" class="tab-content">
+                <h3>Biological Signal Integration</h3>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4>DNA Shape Features</h4>
+                        <p>BRIDGE incorporates physical DNA properties that affect protein binding:</p>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li><strong>Minor groove width:</strong> Narrow grooves facilitate some TF binding</li>
+                            <li><strong>Propeller twist:</strong> Affects DNA flexibility</li>
+                            <li><strong>Roll & helix twist:</strong> Influence 3D structure</li>
+                            <li><strong>Bendability:</strong> Required for nucleosome formation</li>
+                        </ul>
+                        <p>We use pentamer→shape mappings from DNAshape database.</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Motif Analysis</h4>
+                        <p>Comprehensive TF binding site detection:</p>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li>600+ position weight matrices from JASPAR</li>
+                            <li>Conservation-filtered motif scanning</li>
+                            <li>Cooperative binding detection</li>
+                            <li>Cell-type specific TF expression integration</li>
+                        </ul>
+                        <pre><code># Scan for CTCF motif
+ctcf_pwm = load_jaspar_motif("CTCF")
+scores = scan_sequence(sequence, ctcf_pwm)
+conserved_hits = filter_by_conservation(scores)</code></pre>
+                    </div>
+
+                    <div class="card">
+                        <h4>Conservation Analysis</h4>
+                        <p>Evolutionary conservation indicates functional importance:</p>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li>PhyloP scores from 100-way vertebrate alignment</li>
+                            <li>Ultra-conserved element detection</li>
+                            <li>Lineage-specific element identification</li>
+                            <li>Regulatory turnover analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h4>Chromatin Features</h4>
+                        <p>Predict chromatin state from sequence:</p>
+                        <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                            <li>Nucleosome positioning (enhancers are depleted)</li>
+                            <li>CpG island detection (promoter indicator)</li>
+                            <li>G-quadruplex formation potential</li>
+                            <li>Predicted accessibility scores</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Element-Type Specific Weights</h4>
+                    <p>BRIDGE uses different signal weights for enhancers vs promoters:</p>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Signal</th>
+                            <th>Enhancer Weight</th>
+                            <th>Promoter Weight</th>
+                            <th>Rationale</th>
+                        </tr>
+                        <tr>
+                            <td>Model predictions</td>
+                            <td>30%</td>
+                            <td>30%</td>
+                            <td>Primary detection signal</td>
+                        </tr>
+                        <tr>
+                            <td>Attention gradient</td>
+                            <td>20%</td>
+                            <td>30%</td>
+                            <td>Promoters have sharper boundaries</td>
+                        </tr>
+                        <tr>
+                            <td>Motif density</td>
+                            <td>30%</td>
+                            <td>20%</td>
+                            <td>Enhancers are TF binding hubs</td>
+                        </tr>
+                        <tr>
+                            <td>Nucleosome depletion</td>
+                            <td>10%</td>
+                            <td>5%</td>
+                            <td>Active enhancers are accessible</td>
+                        </tr>
+                        <tr>
+                            <td>Conservation</td>
+                            <td>10%</td>
+                            <td>15%</td>
+                            <td>Promoters more conserved</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="optimization" class="tab-content">
+                <h3>vLLM Optimization for Production</h3>
+
+                <div class="card">
+                    <h4>Continuous Batching</h4>
+                    <p>BRIDGE implements vLLM-style continuous batching for maximum throughput:</p>
+                    <pre><code>class BridgeVLLM:
+    def __init__(self):
+        self.request_queue = PriorityQueue()
+        self.batch_tokens = 0
+        self.max_batch_tokens = 65536
+
+    async def process_continuous(self):
+        """Process requests in dynamic batches"""
+        while True:
+            batch = await self._form_batch()
+            if batch:
+                results = await self._process_batch(batch)
+                await self._return_results(results)</code></pre>
+
+                    <p style="margin-top: 1rem;">Benefits:</p>
+                    <ul style="padding-left: 1.5rem;">
+                        <li>No waiting for fixed batch sizes</li>
+                        <li>Dynamic sequence packing</li>
+                        <li>Priority-based scheduling</li>
+                        <li>10x throughput improvement</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4>Memory Optimization</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>PagedAttention:</strong> Virtual memory for KV cache</li>
+                            <li><strong>Prefix caching:</strong> Reuse computation for overlapping sequences</li>
+                            <li><strong>Dynamic padding:</strong> Minimize wasted computation</li>
+                            <li><strong>Mixed precision:</strong> FP16 for efficiency</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h4>Async Processing</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li><strong>Non-blocking API:</strong> Handle 1000s of concurrent requests</li>
+                            <li><strong>Streaming results:</strong> Return elements as detected</li>
+                            <li><strong>Websocket support:</strong> Real-time updates</li>
+                            <li><strong>Result caching:</strong> Redis-backed cache</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>Resource Requirements:</strong></p>
+                    <ul style="padding-left: 1.5rem;">
+                        <li>GPU: Minimum 16GB VRAM (V100/A100 recommended)</li>
+                        <li>RAM: 32GB for model loading</li>
+                        <li>Storage: 50GB for models and reference data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="technical" style="background: white;">
+        <div class="container">
+            <h2>Technical Deep Dive</h2>
+
+            <h3>Cross-Species Generalization</h3>
+            <div class="card">
+                <h4>The Mean Pooling Innovation</h4>
+                <p>HyenaDNA's mean pooling creates species-agnostic representations, enabling BRIDGE to work across species without retraining:</p>
+
+                <div class="diagram-container">
+                    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">Cross-Species Analysis with Mean Pooling</text>
+
+                        <!-- Species sequences -->
+                        <g transform="translate(50, 70)">
+                            <rect x="0" y="0" width="150" height="30" rx="5" fill="#3498db" opacity="0.3"/>
+                            <text x="75" y="20" text-anchor="middle" font-size="12">Human</text>
+
+                            <rect x="0" y="40" width="150" height="30" rx="5" fill="#e74c3c" opacity="0.3"/>
+                            <text x="75" y="60" text-anchor="middle" font-size="12">Mouse</text>
+
+                            <rect x="0" y="80" width="150" height="30" rx="5" fill="#27ae60" opacity="0.3"/>
+                            <text x="75" y="100" text-anchor="middle" font-size="12">Zebrafish</text>
+                        </g>
+
+                        <!-- Arrow -->
+                        <path d="M 220 100 L 280 100" stroke="#666" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+                        <!-- Mean pooling -->
+                        <rect x="300" y="70" width="200" height="80" rx="10" fill="#f39c12" opacity="0.2" stroke="#f39c12" stroke-width="2"/>
+                        <text x="400" y="100" text-anchor="middle" font-size="14" font-weight="bold">Mean Pooling</text>
+                        <text x="400" y="120" text-anchor="middle" font-size="12">Species-agnostic</text>
+                        <text x="400" y="135" text-anchor="middle" font-size="12">representation</text>
+
+                        <!-- Arrow -->
+                        <path d="M 520 100 L 580 100" stroke="#666" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+                        <!-- Output -->
+                        <rect x="600" y="80" width="150" height="40" rx="5" fill="#2c3e50"/>
+                        <text x="675" y="105" text-anchor="middle" font-size="12" fill="white">Universal</text>
+                        <text x="675" y="115" text-anchor="middle" font-size="12" fill="white">Detection</text>
+
+                        <!-- Benefits -->
+                        <text x="400" y="200" text-anchor="middle" font-size="14" font-weight="bold" fill="#2c3e50">Benefits:</text>
+                        <text x="400" y="220" text-anchor="middle" font-size="12" fill="#666">• No species-specific training needed</text>
+                        <text x="400" y="240" text-anchor="middle" font-size="12" fill="#666">• Works on non-model organisms</text>
+                        <text x="400" y="260" text-anchor="middle" font-size="12" fill="#666">• Captures conserved regulatory logic</text>
+
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrowhead3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <p style="margin-top: 1rem;">This allows BRIDGE to:</p>
+                <ul style="padding-left: 1.5rem;">
+                    <li>Analyze genomes without species-specific training</li>
+                    <li>Compare regulatory landscapes across evolution</li>
+                    <li>Work on newly sequenced organisms</li>
+                    <li>Identify both conserved and lineage-specific elements</li>
+                </ul>
+            </div>
+
+            <h3>Model Synergy Examples</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Example 1: Distant Enhancer Detection</h4>
+                    <p><strong>Scenario:</strong> Enhancer 200kb from target gene</p>
+                    <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                        <li><strong>DNABERT-2 alone:</strong> Would miss it (512bp window)</li>
+                        <li><strong>HyenaDNA alone:</strong> Detects region but ±500bp uncertainty</li>
+                        <li><strong>BRIDGE:</strong> HyenaDNA finds it, DNABERT-2 refines to ±20bp</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Example 2: Clustered Elements</h4>
+                    <p><strong>Scenario:</strong> Two enhancers 300bp apart</p>
+                    <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                        <li><strong>HyenaDNA alone:</strong> Merges into one large element</li>
+                        <li><strong>DNABERT-2 alone:</strong> Might catch both but miss interaction</li>
+                        <li><strong>BRIDGE:</strong> Correctly separates and characterizes both</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="implementation">
+        <div class="container">
+            <h2>Implementation Details</h2>
+
+            <h3>Core Components</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Model Management</h4>
+                    <pre><code>class BridgeModelManager:
+    def __init__(self, config):
+        self.models = {
+            'hyenadna': HyenaDNAWrapper(max_length=450000),
+            'dnabert2': DNABert2Wrapper(max_length=512),
+            'lucaone': LucaOneWrapper()
+        }
+
+    async def predict_regulatory_elements(self, sequence):
+        # Stage 1: Coarse detection
+        coarse = await self._coarse_detection(sequence)
+
+        # Stage 2: Refinement
+        refined = await self._refine_boundaries(sequence, coarse)
+
+        # Stage 3: Validation
+        validated = await self._validate_elements(refined)
+
+        return validated</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>Boundary Refiner</h4>
+                    <pre><code>class BoundaryRefiner:
+    def refine_element_boundaries(self, element, context):
+        # Extract signals
+        signals = {
+            'attention': self._process_attention_signal(),
+            'motif_density': self._compute_motif_density(),
+            'dna_shape': self._compute_dna_shape(),
+            'conservation': self._get_conservation_score()
+        }
+
+        # Integrate signals
+        composite = self._create_composite_signal(
+            signals,
+            element_type=element.element_type
+        )
+
+        # Find precise boundaries
+        start, end = self._find_boundaries(composite)
+
+        return RegulatoryElement(start, end, ...)</code></pre>
+                </div>
+            </div>
+
+            <h3>Key Algorithms</h3>
+            <div class="card">
+                <h4>Attention Gradient Boundary Detection</h4>
+                <pre><code>def _process_attention_signal(self, attention_map):
+    """Extract boundary information from attention patterns"""
+    # Average attention across heads and layers
+    avg_attention = attention_map.mean(axis=(0, 1))
+
+    # Compute gradient to find sharp transitions
+    gradient = np.gradient(avg_attention)
+    gradient_magnitude = np.abs(gradient)
+
+    # Smooth to reduce noise
+    smoothed = gaussian_filter1d(gradient_magnitude, sigma=2)
+
+    # Find peaks (potential boundaries)
+    peaks, properties = find_peaks(
+        smoothed,
+        prominence=0.2,  # Minimum peak prominence
+        distance=20       # Minimum distance between peaks
+    )
+
+    return smoothed, peaks</code></pre>
+            </div>
+
+            <div class="card">
+                <h4>Multi-Signal Integration</h4>
+                <pre><code>def _integrate_signals_for_boundaries(self, signals, element_type):
+    """Combine multiple signals with type-specific weights"""
+    # Define weights based on element type
+    weights = {
+        'enhancer': {
+            'model_prediction': 0.30,
+            'attention_gradient': 0.20,
+            'motif_density': 0.30,
+            'dna_shape': 0.10,
+            'conservation': 0.10
+        },
+        'promoter': {
+            'model_prediction': 0.30,
+            'attention_gradient': 0.30,
+            'motif_density': 0.20,
+            'dna_shape': 0.05,
+            'conservation': 0.15
+        }
+    }[element_type]
+
+    # Normalize each signal to [0, 1]
+    normalized_signals = {}
+    for name, signal in signals.items():
+        if signal.max() > signal.min():
+            normalized = (signal - signal.min()) / (signal.max() - signal.min())
+        else:
+            normalized = signal
+        normalized_signals[name] = normalized
+
+    # Weighted combination
+    composite = np.zeros_like(list(signals.values())[0])
+    for name, weight in weights.items():
+        if name in normalized_signals:
+            composite += weight * normalized_signals[name]
+
+    return composite</code></pre>
+            </div>
+
+            <h3>Performance Optimizations</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Batch Processing</h4>
+                    <pre><code># Efficient batch processing
+async def batch_analyze(sequences, batch_size=256):
+    results = []
+
+    # Process in batches
+    for i in range(0, len(sequences), batch_size):
+        batch = sequences[i:i + batch_size]
+
+        # Parallel processing
+        batch_results = await asyncio.gather(*[
+            analyze_sequence(seq) for seq in batch
+        ])
+
+        results.extend(batch_results)
+
+    return results</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>Caching Strategy</h4>
+                    <pre><code># Redis-backed caching
+@cache_result(expire=3600)
+async def analyze_sequence(sequence):
+    # Check cache
+    cache_key = hashlib.md5(sequence.encode()).hexdigest()
+    cached = await redis.get(cache_key)
+
+    if cached:
+        return json.loads(cached)
+
+    # Process if not cached
+    result = await process_sequence(sequence)
+
+    # Cache result
+    await redis.set(cache_key, json.dumps(result))
+
+    return result</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" style="background: white;">
+        <div class="container">
+            <h2>Using BRIDGE</h2>
+
+            <h3>Installation</h3>
+            <div class="card">
+                <pre><code># Clone repository
+git clone https://github.com/chazhyseni/bridge.git
+cd bridge
+
+# Create conda environment
+conda env create -f environment.yml
+conda activate bridge
+
+# Install BRIDGE
+pip install -e .
+
+# Download models and data (50GB)
+python scripts/download_models.py
+python scripts/download_data.py --genomes hg38 mm10</code></pre>
+            </div>
+
+            <h3>Basic Usage</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Python API</h4>
+                    <pre><code>from bridge import WorkflowOrchestrator
+import asyncio
+
+# Initialize BRIDGE
+orchestrator = WorkflowOrchestrator()
+await orchestrator.initialize()
+
+# Analyze sequence
+from bridge.core.models import DNASequence
+
+seq = DNASequence(
+    sequence="ATCG" * 1000,  # 4kb sequence
+    chromosome="chr12",
+    start=7940000,
+    end=7944000
+)
+
+# Get results
+results = await orchestrator.components[
+    'model_manager'
+].predict_regulatory_elements(seq)
+
+# Print elements
+for elem in results:
+    print(f"{elem.element_type}: "
+          f"{elem.chr}:{elem.start}-{elem.end}")
+    print(f"Score: {elem.score:.3f}")
+    print(f"TF motifs: {len(elem.tf_motifs)}")</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>Command Line</h4>
+                    <pre><code># Analyze single sequence
+bridge analyze -s ATCGATCG... \
+  --output results.json
+
+# Batch analysis
+bridge batch -i sequences.fasta \
+  -o results.bed \
+  --format bed
+
+# Gene-centric analysis
+bridge gene -g NANOG \
+  --upstream 1000000 \
+  --downstream 100000 \
+  --genome hg38
+
+# Start API server
+bridge serve --host 0.0.0.0 --port 8000</code></pre>
+                </div>
+            </div>
+
+            <h3>Advanced Features</h3>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('crossspecies')">Cross-Species Analysis</button>
+                <button class="tab" onclick="showTab('finetuning')">Fine-Tuning</button>
+                <button class="tab" onclick="showTab('api')">REST API</button>
+            </div>
+
+            <div id="crossspecies" class="tab-content active">
+                <h4>Cross-Species Regulatory Analysis</h4>
+                <pre><code># Compare regulatory elements across species
+results = await orchestrator.cross_species_analysis(
+    reference_species="human",
+    target_species=["mouse", "zebrafish", "chicken"],
+    chromosome="chr2",
+    start=176000000,
+    end=176100000
+)
+
+# Analyze conservation
+for element in results['ultra_conserved']:
+    print(f"Ultra-conserved {element['type']}: "
+          f"{element['conservation']:.1%} conservation")
+
+# Find lineage-specific elements
+for species, elements in results['lineage_specific'].items():
+    print(f"{species}: {len(elements)} unique elements")</code></pre>
+
+                <p style="margin-top: 1rem;">This enables:</p>
+                <ul style="padding-left: 1.5rem;">
+                    <li>Evolutionary analysis of regulatory changes</li>
+                    <li>Identification of functionally important elements</li>
+                    <li>Discovery of species-specific regulatory innovations</li>
+                </ul>
+            </div>
+
+            <div id="finetuning" class="tab-content">
+                <h4>Fine-Tuning for Specific Applications</h4>
+                <pre><code># Fine-tune on cell-type specific data
+bridge train \
+  --model dnabert2 \
+  --task regulatory \
+  --data neural_enhancers.json \
+  --cell-type neural_progenitor \
+  --use-lora \
+  --epochs 10 \
+  --output models/neural_specific
+
+# Use fine-tuned model
+orchestrator = WorkflowOrchestrator(
+    config="config/neural_config.json"
+)</code></pre>
+
+                <p style="margin-top: 1rem;">LoRA fine-tuning allows:</p>
+                <ul style="padding-left: 1.5rem;">
+                    <li>Cell-type specific models with minimal data</li>
+                    <li>Disease-specific regulatory detection</li>
+                    <li>Species-specific optimization</li>
+                    <li>Only 10MB additional parameters</li>
+                </ul>
+            </div>
+
+            <div id="api" class="tab-content">
+                <h4>REST API Usage</h4>
+                <pre><code># Submit analysis request
+curl -X POST http://localhost:8000/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sequence": "ATCGATCG...",
+    "assembly": "hg38",
+    "analysis_type": "full",
+    "include_expression": true
+  }'
+
+# Get results
+{
+  "request_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "elements": [
+    {
+      "type": "enhancer",
+      "chr": "chr12",
+      "start": 7940150,
+      "end": 7940847,
+      "score": 0.94,
+      "core_start": 7940250,
+      "core_end": 7940750,
+      "tf_motifs": [
+        {"tf": "CTCF", "position": 125, "score": 0.91},
+        {"tf": "P300", "position": 342, "score": 0.87}
+      ],
+      "target_genes": ["MYC", "PVT1"],
+      "conservation_score": 0.82
+    }
+  ]
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="versatility" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+        <div class="container">
+            <h2>Beyond Regulatory Detection: BRIDGE-LM's Versatile Workflows</h2>
+
+            <div class="highlight-box" style="background: white;">
+                <p><strong>Key Insight:</strong> BRIDGE-LM's modular architecture and comprehensive biological understanding enable a wide range of genomic analyses beyond regulatory element detection.</p>
+            </div>
+
+            <h3>Built-in Analysis Workflows</h3>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <h4>🧬 Variant Impact Analysis</h4>
+                    <p>Predict how genetic variants affect regulatory function:</p>
+                    <pre><code># Analyze variant impacts
+results = await orchestrator.variant_impact_analysis(
+    variants_file="mutations.vcf"
+)
+
+# Results include:
+# - Disrupted regulatory elements
+# - Affected TF binding sites
+# - Expression change predictions
+# - Clinical relevance scores</code></pre>
+                    <p style="margin-top: 1rem;"><strong>Applications:</strong> GWAS interpretation, precision medicine, variant prioritization</p>
+                </div>
+
+                <div class="card">
+                    <h4>📊 Expression Prediction</h4>
+                    <p>Predict gene expression from regulatory landscape:</p>
+                    <pre><code># Predict expression for gene list
+expression = await orchestrator.expression_analysis(
+    genes_file="pluripotency_genes.txt",
+    cell_type="ESC"
+)
+
+# Includes:
+# - Quantitative expression levels
+# - Enhancer contribution scores
+# - Cell-type specificity
+# - Regulatory network effects</code></pre>
+                    <p style="margin-top: 1rem;"><strong>Applications:</strong> Cell fate prediction, drug target identification</p>
+                </div>
+
+                <div class="card">
+                    <h4>🌐 Regulatory Network Analysis</h4>
+                    <p>Build gene regulatory networks from sequence:</p>
+                    <pre><code># Construct regulatory network
+network = await orchestrator.regulatory_network_analysis(
+    genes_file="tf_genes.txt"
+)
+
+# Generates:
+# - TF → target gene edges
+# - Binding affinity scores
+# - Network topology metrics
+# - Feedback loop detection</code></pre>
+                    <p style="margin-top: 1rem;"><strong>Applications:</strong> Systems biology, pathway analysis</p>
+                </div>
+            </div>
+
+            <h3>Advanced Multi-Modal Workflows</h3>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>🔬 Central Dogma Validation</h4>
+                    <p>Validate DNA→RNA→Protein relationships using LucaOne:</p>
+                    <pre><code># Multi-modal validation
+validation = await orchestrator.multimodal_analysis(
+    dna_sequence="ATCG...",
+    rna_sequence="AUGC...",
+    protein_sequence="MKVL..."
+)
+
+# Validates:
+# - Transcription feasibility
+# - Translation accuracy
+# - Protein-DNA binding
+# - Regulatory feedback loops
+
+print(f"Central dogma valid: {validation['central_dogma']['all_valid']}")
+print(f"Protein binds DNA: {validation['protein_dna_interaction']['score']}")</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>🌍 Evolutionary Analysis</h4>
+                    <p>Track regulatory evolution across species:</p>
+                    <pre><code># Evolutionary regulatory analysis
+evolution = await orchestrator.evolutionary_analysis(
+    gene_list=["PAX6", "HOX genes"],
+    species_list=["human", "mouse", "zebrafish", "fly"]
+)
+
+# Discovers:
+# - Ultra-conserved elements
+# - Lineage-specific innovations
+# - Regulatory turnover rates
+# - Functional conservation patterns</code></pre>
+                </div>
+            </div>
+
+            <h3>Custom Pipeline Creation</h3>
+
+            <div class="card">
+                <h4>🔧 Build Your Own Workflows</h4>
+                <p>BRIDGE-LM's modular design allows creating custom analysis pipelines:</p>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h5>Example: Cancer Enhancer Analysis</h5>
+                        <pre><code># custom_cancer_pipeline.yaml
+name: "Cancer Enhancer Hijacking Detection"
+steps:
+  - name: "Detect enhancers"
+    type: "regulatory_detection"
+    parameters:
+      element_types: ["enhancer"]
+      min_score: 0.8
+
+  - name: "Find super-enhancers"
+    type: "cluster_analysis"
+    parameters:
+      max_distance: 12500
+      min_elements: 3
+
+  - name: "Check TAD boundaries"
+    type: "3d_structure"
+    parameters:
+      tad_data: "hic_data.cool"
+
+  - name: "Identify oncogene targets"
+    type: "gene_assignment"
+    parameters:
+      gene_list: "oncogenes.txt"
+      max_distance: 1000000
+
+  - name: "Validate with expression"
+    type: "expression_correlation"
+    parameters:
+      expression_data: "tcga_expression.tsv"</code></pre>
+                    </div>
+
+                    <div>
+                        <h5>Run Custom Pipeline</h5>
+                        <pre><code># Execute custom pipeline
+results = await orchestrator.custom_pipeline(
+    pipeline_config="custom_cancer_pipeline.yaml",
+    input_regions="amplified_regions.bed"
+)
+
+# Results include:
+# - Hijacked enhancers
+# - Affected oncogenes
+# - Patient stratification
+# - Therapeutic targets
+
+# Export for visualization
+orchestrator.export_to_genome_browser(
+    results,
+    format="bigwig",
+    output="cancer_enhancers.bw"
+)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Specialized Applications</h3>
+
+            <div class="grid grid-3">
+                <div class="feature">
+                    <div class="feature-icon">🧪</div>
+                    <h4>CRISPR Guide Design</h4>
+                    <p>Design guides targeting regulatory elements:</p>
+                    <ul style="padding-left: 1.5rem; text-align: left;">
+                        <li>Target functional cores</li>
+                        <li>Avoid essential motifs</li>
+                        <li>Predict regulatory outcomes</li>
+                        <li>Multiplex optimization</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🏥</div>
+                    <h4>Clinical Interpretation</h4>
+                    <p>Interpret non-coding variants:</p>
+                    <ul style="padding-left: 1.5rem; text-align: left;">
+                        <li>GWAS signal fine-mapping</li>
+                        <li>eQTL colocalization</li>
+                        <li>Disease mechanism prediction</li>
+                        <li>Therapeutic target ranking</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🌱</div>
+                    <h4>Synthetic Biology</h4>
+                    <p>Design regulatory circuits:</p>
+                    <ul style="padding-left: 1.5rem; text-align: left;">
+                        <li>Synthetic enhancer design</li>
+                        <li>Inducible promoters</li>
+                        <li>Cell-type specific expression</li>
+                        <li>Orthogonal regulation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Integration with Existing Tools</h3>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Bioinformatics Ecosystem</h4>
+                    <p>BRIDGE-LM integrates seamlessly with standard tools:</p>
+                    <pre><code># Export to standard formats
+orchestrator.export_results(
+    results,
+    formats=["bed", "bigwig", "gff3"]
+)
+
+# Integration with Galaxy
+bridge galaxy-tool \
+  --input sequences.fa \
+  --workflow regulatory_analysis
+
+# R/Bioconductor interface
+library(bridgelm)
+results <- analyze_regulatory_elements(
+    sequence = "ATCG...",
+    genome = "hg38"
+)</code></pre>
+                </div>
+
+                <div class="card">
+                    <h4>Machine Learning Pipelines</h4>
+                    <p>Use BRIDGE-LM features in ML workflows:</p>
+                    <pre><code># Extract features for ML
+features = orchestrator.extract_features(
+    sequences,
+    feature_types=[
+        "regulatory_scores",
+        "motif_counts",
+        "dna_shape",
+        "conservation",
+        "attention_weights"
+    ]
+)
+
+# Use in scikit-learn
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier()
+clf.fit(features, labels)
+
+# PyTorch DataLoader
+dataset = BridgeDataset(features)
+loader = DataLoader(dataset, batch_size=32)</code></pre>
+                </div>
+            </div>
+
+            <div class="warning-box" style="background: #e8f4f8; border-left-color: #3498db;">
+                <h4>Workflow Best Practices</h4>
+                <ul style="padding-left: 1.5rem;">
+                    <li><strong>Start simple:</strong> Use pre-built workflows before creating custom pipelines</li>
+                    <li><strong>Validate results:</strong> Always include biological validation steps</li>
+                    <li><strong>Batch appropriately:</strong> Group similar analyses for efficiency</li>
+                    <li><strong>Cache intermediates:</strong> Enable caching for iterative analyses</li>
+                    <li><strong>Monitor resources:</strong> Some workflows are memory-intensive</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="future">
+        <div class="container">
+            <h2>Current Limitations & Future Directions</h2>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>Current Limitations</h3>
+                    <ul style="padding-left: 1.5rem;">
+                        <li><strong>Computational requirements:</strong> Needs GPU with 16GB+ VRAM</li>
+                        <li><strong>Training data bias:</strong> Better on well-studied organisms</li>
+                        <li><strong>3D interactions:</strong> Doesn't model chromatin loops</li>
+                        <li><strong>Cell-type specificity:</strong> Requires fine-tuning for optimal results</li>
+                        <li><strong>Validation:</strong> Limited experimental validation so far</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Future Enhancements</h3>
+                    <ul style="padding-left: 1.5rem;">
+                        <li><strong>3D genome integration:</strong> Incorporate Hi-C data</li>
+                        <li><strong>Single-cell resolution:</strong> Cell-type specific predictions</li>
+                        <li><strong>Causal modeling:</strong> Predict effects of mutations</li>
+                        <li><strong>Lightweight models:</strong> Distillation for edge deployment</li>
+                        <li><strong>Interactive visualization:</strong> Genome browser integration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Research Opportunities</h3>
+                <p>BRIDGE opens several research directions:</p>
+                <ul style="padding-left: 1.5rem; margin: 1rem 0;">
+                    <li><strong>Regulatory grammar:</strong> Learn rules of enhancer-promoter compatibility</li>
+                    <li><strong>Evolution:</strong> Track regulatory innovation across phylogeny</li>
+                    <li><strong>Disease variants:</strong> Systematic analysis of non-coding mutations</li>
+                    <li><strong>Synthetic biology:</strong> Design regulatory elements with desired properties</li>
+                    <li><strong>Cross-species transfer:</strong> Apply regulatory logic across organisms</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>BRIDGE - Biological Regulatory Integration & Detection for Gene Expression</p>
+            <p style="margin-top: 1rem;">
+                Created by <a href="mailto:chaz.hyseni@gmail.com">Chaz Hyseni</a> |
+                <a href="https://github.com/chazhyseni/bridge">GitHub</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                Built on HyenaDNA, DNABERT-2, and LucaOne
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Mark clicked tab as active
+            event.target.classList.add('active');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation to elements as they appear
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.card, section').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
