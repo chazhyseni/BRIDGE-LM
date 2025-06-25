@@ -6,11 +6,10 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 *A hierarchical transformer-based framework that orchestrates multiple genomic language models to detect regulatory elements with both genome-wide context and nucleotide-level precision*
 
-[**📚 Full Documentation**](https://chazhyseni.github.io/BRIDGE-LM/) | [**🚀 Quick Start**](#quick-start) | [**📊 Examples**](#examples) | [**📄 Paper**](#citation)
+[**📚 Full Documentation**](https://chazhyseni.github.io/BRIDGE-LM/) | [**🚀 Quick Start**](#quick-start) | [**📊 Examples**](#examples)
 
 </div>
 
